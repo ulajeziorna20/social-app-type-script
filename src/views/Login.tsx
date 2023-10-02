@@ -1,24 +1,42 @@
-import React, { FormEvent, useState } from "react";
+import React, { ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
+import './Login.css';
+import { FormDataLogin } from "../types";
+
 
 export default function Login() {
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState<FormDataLogin>({
+    username: "",
+    password: ""
+  });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(username, password);
+
   }
 
-  return <div className="LoginFormContainer">
-    <form onSubmit={(e) => handleSubmit(e)}>
-      <label form={username}>Username*:</label>
-      <input type="text"
-        placeholder="Enter username"
-        value={username} onChange={(e) => setUserName(e.target.value)} />
-      <label form={password}>Password*:</label>
-      <input type="password" placeholder="Enter password"
-        value={password} onChange={(e) => setPassword(e.target.value)} />
-      <button type="submit">Login</button>
-    </form>
-  </div>;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
+    const name = target.name;
+    setFormData({
+      ...formData,
+      [name]: target.value
+    });
+  }
+
+  return (
+    <div className="LoginFormContainer">
+      <h2>Log In</h2>
+      <form onSubmit={(e) => handleSubmit(e)} className="LoginForm">
+        <label form={formData.username}>Username*:</label>
+        <input type="text"
+          name="username"
+          placeholder="Enter username"
+          onChange={handleInputChange} />
+        <label form={formData.password}>Password*:</label>
+        <input type="password" placeholder="Enter password"
+          name="password" onChange={handleInputChange} />
+        <button type="submit" className="LoginFormButton">Login</button>
+      </form>
+    </div>
+  )
 }

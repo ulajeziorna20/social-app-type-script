@@ -32,7 +32,7 @@ export default function Home() {
       (response: AxiosResponse<any>) => {
         // how to map to correct interface type?
         console.log(response);
-        setPosts(response.data as Post[]);
+        setPosts(posts.concat(response.data as Post[]));
       }
     )
       .catch((error) => {
@@ -52,7 +52,7 @@ export default function Home() {
       <div className="PostList">
         {posts.map(
           (post: Post) => {
-            return <PostElement post={post}></PostElement>
+            return <PostElement post={post} key={post.id}></PostElement>
           }
         )}
       </div>

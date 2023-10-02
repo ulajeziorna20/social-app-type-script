@@ -15,3 +15,8 @@ export type User = {
   created_at: Date,
   updated_at: Date
 }
+
+export type FormDataLogin = {
+  username: string,
+  password: string
+}
