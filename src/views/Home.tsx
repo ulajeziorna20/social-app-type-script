@@ -25,6 +25,21 @@ export default function Home() {
       })
   }
 
+  const getNextPosts = () => {
+    axios.post(`${API_URL}/post/older-then`, {
+      date: posts[posts.length - 1].created_at
+    }).then(
+      (response: AxiosResponse<any>) => {
+        // how to map to correct interface type?
+        console.log(response);
+        setPosts(response.data as Post[]);
+      }
+    )
+      .catch((error) => {
+        console.error('An error has occured:', error);
+      })
+  }
+
   useEffect(() => {
     getLatestPosts();
   }, []);
@@ -41,7 +56,7 @@ export default function Home() {
           }
         )}
       </div>
-      <button className="LoadMoreButton">Load more</button>
+      <button className="LoadMoreButton" onClick={getNextPosts}>Load more</button>
     </div>
   )
 }
