@@ -1,8 +1,10 @@
 import React, { FormEvent, useState } from "react";
 import './Login.css';
-import { FormDataLogin, ResponseLogin } from "../types";
+import { FormDataLogin, ResponseLogin, User } from "../types";
 import axios, { AxiosResponse } from "axios";
 import { API_URL } from "../index";
+import { setLoggedUser } from "./App";
+import { Form, redirect } from "react-router-dom";
 
 
 export default function Login() {
@@ -11,18 +13,18 @@ export default function Login() {
     password: ""
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
 
-    axios.post(`${API_URL}/login`, {
-      username: formData.username,
-      password: formData.password
-    }).then((response: AxiosResponse<ResponseLogin>) => {
-      console.log('response', response);
-    })
-      .catch((error) => console.error("An error has occured during logging in:", error));
+  //   axios.post(`${API_URL}/login`, {
+  //     username: formData.username,
+  //     password: formData.password
+  //   }).then((response: AxiosResponse<ResponseLogin>) => {
+  //     console.log('response', response);
+  //   })
+  //     .catch((error) => console.error("An error has occured during logging in:", error));
 
-  }
+  // }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
@@ -36,7 +38,7 @@ export default function Login() {
   return (
     <div className="LoginFormContainer">
       <h2>Log In</h2>
-      <form onSubmit={handleSubmit} className="LoginForm">
+      <Form className="LoginForm" method="post">
         <label form={formData.username}>Username*:</label>
         <input type="text"
           name="username"
@@ -46,7 +48,24 @@ export default function Login() {
         <input type="password" placeholder="Enter password"
           name="password" onChange={handleInputChange} />
         <button type="submit" className="LoginFormButton">Login</button>
-      </form>
+      </Form>
     </div>
   )
+}
+
+
+
+
+
+export async function loggingAction(request: FormDataLogin) {
+
+  axios.post(`${API_URL}/user/login`, {
+    request
+  }).then((response: AxiosResponse<any>) => {
+    console.log('response', response.data as ResponseLogin);
+    const loggedUser = response.data as ResponseLogin;
+    setLoggedUser(loggedUser);
+    return redirect('/home');
+  })
+    .catch((error) => console.error("An error has occurred during logging in:", error));
 }
