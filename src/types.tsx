@@ -3,7 +3,7 @@ export type Post = {
   content: string,
   created_at: Date,
   updated_at: Date,
-  likes: [],
+  likes: User[],
   user: User
 }
 
