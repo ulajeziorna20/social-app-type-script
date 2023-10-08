@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import axios, { AxiosResponse } from "axios";
-import { Post } from "../types";
+import { ObjectContext, Post } from "../types";
 import './Home.css';
 import PostElement from "./PostElement";
 
-import {API_URL} from "../index";
+import { API_URL } from "../index";
+import { useOutletContext } from "react-router-dom";
 
 export default function Home() {
+
+
+  const obj: ObjectContext = useOutletContext();
 
   const [posts, setPosts] = useState<Post[]>([]);
 
@@ -15,7 +19,7 @@ export default function Home() {
     axios.post(`${API_URL}/post/latest`).then(
       (response: AxiosResponse<any>) => {
         // how to map to correct interface type?
-        console.log(response.data);
+
         setPosts(response.data as Post[]);
       }
     )
@@ -30,7 +34,7 @@ export default function Home() {
     }).then(
       (response: AxiosResponse<any>) => {
         // how to map to correct interface type?
-        console.log(response);
+
         setPosts(posts.concat(response.data as Post[]));
       }
     )
@@ -48,10 +52,17 @@ export default function Home() {
 
   return (
     <div className="HomeContainer">
+      {obj.loggedUser.jwt_token.length > 0 &&
+        <div className="NewPostContainer">
+          <textarea rows={3} className="NewPostTextarea" placeholder="Write new post" />
+          <button className="NewPostAddButton">Add</button>
+        </div>
+      }
       <div className="PostList">
+        <h2>Posts</h2>
         {posts.map(
           (post: Post) => {
-            return <PostElement post={post} key={post.id}></PostElement>
+            return <PostElement post={post} key={post.id} />
           }
         )}
       </div>

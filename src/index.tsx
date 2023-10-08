@@ -6,9 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./views/Home";
 import ErrorPage from "./views/ErrorPage";
-import Login, { loggingAction } from "./views/Login";
+import Login from "./views/Login";
 import SignUp from "./views/SignUp";
-import { User } from "./interfaces";
+import SignOut from "./views/SignOut";
 
 export const API_URL = "https://akademia108.pl/api/social-app";
 
@@ -18,14 +18,16 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "home", element: <Home/>,
+        path: "home", element: <Home />,
       },
       {
-        path: "login", element: <Login/>,
-        action: loggingAction
+        path: "login", element: <Login />,
       },
       {
         path: "signup", element: <SignUp />
+      },
+      {
+        path: "signout", element: <SignOut />
       }
     ],
     errorElement: <ErrorPage />

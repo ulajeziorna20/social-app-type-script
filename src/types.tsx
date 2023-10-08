@@ -23,9 +23,15 @@ export type FormDataLogin = {
 
 
 export type ResponseLogin = {
-  error: boolean,
-  id: number,
+  error?: boolean,
+  id?: number,
   jwt_token: string,
-  ttl: number,
-  username: string
+  ttl?: number,
+  username?: string
+}
+
+
+export interface ObjectContext {
+  loggedUser: ResponseLogin,
+  setLoggedUser: (res: ResponseLogin) => void
 }
