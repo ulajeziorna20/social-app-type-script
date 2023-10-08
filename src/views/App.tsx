@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Link, Outlet } from "react-router-dom";
-import { ResponseLogin } from "../types";
+import { ResponseLogin } from "../helpers/types";
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
       <nav>
         <ul>
           <li>
-            <Link to={"/home"}>HOME</Link>
+            <Link to={"/"}>HOME</Link>
           </li>
           {loggedUser.jwt_token.length == 0 &&
             <li>

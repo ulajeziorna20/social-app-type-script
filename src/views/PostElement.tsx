@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { Post } from "../types";
+import { ObjectContext, Post } from "../helpers/types";
 import './PostElement.css';
+import { useOutletContext } from "react-router-dom";
+import axios, { AxiosResponse } from "axios";
+import { REACT_APP_API_URL } from "../react-app-env.d";
+import { datePipe } from "../helpers/functions";
 
 type PostProps = {
-  post: Post
+  post: Post,
+  deletePost: () => void
 }
 
 export default function PostElement(props: PostProps) {
 
-  const [likesCount, setLikesCount] = useState(props.post.likes.length);
+  const objectContext: ObjectContext = useOutletContext();
 
+
+
+  const [likesCount, setLikesCount] = useState<number>(props.post.likes.length);
+  const [dateOfPost, setDateOfPost] = useState<string>(datePipe(props.post.created_at));
 
 
 
@@ -19,13 +28,17 @@ export default function PostElement(props: PostProps) {
         <div className="SinglePostHeader">
           <img src={props.post.user?.avatar_url} alt="user image" />
           <h3>{props.post.user?.username}</h3>
-          <span>created at: {props.post.created_at.toString()}</span>
+          <span>created at: {dateOfPost}</span>
         </div>
         <div className="SinglePostBody">
           <p key={props.post.id}>{props.post.content}</p>
         </div>
         <div className="SinglePostFooter">
           <span>Likes: {likesCount}</span>
+          {
+            objectContext.loggedUser.username === props.post.user?.username &&
+            <button className="SinglePostDeleteButton" onClick={props.deletePost}>Delete</button>
+          }
         </div>
       </div>
     </div>

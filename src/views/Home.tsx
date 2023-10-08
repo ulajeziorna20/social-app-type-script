@@ -1,28 +1,28 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import axios, { AxiosResponse } from "axios";
-import { ObjectContext, Post } from "../types";
+import { ObjectContext, Post } from "../helpers/types";
 import './Home.css';
 import PostElement from "./PostElement";
 
-import { API_URL } from "../index";
 import { useOutletContext } from "react-router-dom";
+import { REACT_APP_API_URL } from "../react-app-env.d";
 
 export default function Home() {
 
 
-  const obj: ObjectContext = useOutletContext();
+  const objectContext: ObjectContext = useOutletContext();
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPostContent, setNewPostContent] = useState<string>('');
 
 
 
-  axios.defaults.headers.common['Authorization'] = "Bearer " + (obj.loggedUser.jwt_token.length > 0 ? obj.loggedUser.jwt_token : '');
+  axios.defaults.headers.common['Authorization'] = "Bearer " + (objectContext.loggedUser.jwt_token.length > 0 ? objectContext.loggedUser.jwt_token : '');
 
 
   const getLatestPosts = () => {
-    axios.post(`${API_URL}/post/latest`).then(
+    axios.post(`${REACT_APP_API_URL}/post/latest`).then(
       (response: AxiosResponse<any>) => {
         // how to map to correct interface type?
 
@@ -35,7 +35,7 @@ export default function Home() {
   }
 
   const getNewestPosts = () => {
-    axios.post(`${API_URL}/post/newer-then`, {
+    axios.post(`${REACT_APP_API_URL}/post/newer-then`, {
       date: posts[0].created_at
     }).then(
       (response: AxiosResponse<any>) => {
@@ -49,7 +49,7 @@ export default function Home() {
   }
 
   const getOlderPosts = () => {
-    axios.post(`${API_URL}/post/older-then`, {
+    axios.post(`${REACT_APP_API_URL}/post/older-then`, {
       date: posts[posts.length - 1].created_at
     }).then(
       (response: AxiosResponse<any>) => {
@@ -65,7 +65,7 @@ export default function Home() {
 
   const addNewPost = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios.post(`${API_URL}/post/add`, {
+    axios.post(`${REACT_APP_API_URL}/post/add`, {
       content: newPostContent
     }).then(
       (response: AxiosResponse<any>) => {
@@ -81,6 +81,20 @@ export default function Home() {
   }
 
 
+  const deletePost = (id: number) => {
+    axios.post(`${REACT_APP_API_URL}/post/delete`, {
+      post_id: id
+    }).then(
+      (response: AxiosResponse<any>) => {
+        if (response.status === 200) {
+          getLatestPosts();
+        }
+      }
+    )
+      .catch((error) => {
+        console.error('An error has occurred during deleting the post:', error);
+      })
+  }
 
 
 
@@ -93,7 +107,7 @@ export default function Home() {
 
   return (
     <div className="HomeContainer">
-      {obj.loggedUser.jwt_token.length > 0 &&
+      {objectContext.loggedUser.jwt_token.length > 0 &&
         <div className="NewPostContainer">
           <form className="NewPostForm" onSubmit={(event: FormEvent<HTMLFormElement>) => addNewPost(event)}>
             <textarea rows={3}
@@ -109,7 +123,7 @@ export default function Home() {
         <h2>Posts</h2>
         {posts.map(
           (post: Post) => {
-            return <PostElement post={post} key={post.id} />
+            return <PostElement post={post} key={post.id} deletePost={() => deletePost(post.id)} />
           }
         )}
       </div>

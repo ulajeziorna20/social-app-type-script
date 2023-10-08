@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { ObjectContext } from "../types";
+import { ObjectContext } from "../helpers/types";
 import { useOutletContext } from "react-router-dom";
 import "./SignOut.css";
 
 export default function SignOut() {
 
-  const obj: ObjectContext = useOutletContext();
+  const objectContext: ObjectContext = useOutletContext();
 
   useEffect(() => {
     localStorage.setItem("loggedUser", '');
-    obj.setLoggedUser({ jwt_token: '' });
-  }, [])
+    objectContext.setLoggedUser({ jwt_token: '' });
+  })
 
   return <div className="Container">
     <h2>Sign Out</h2>

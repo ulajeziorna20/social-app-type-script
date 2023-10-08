@@ -1,14 +1,13 @@
 import React, { FormEvent, useState } from "react";
 import './Login.css';
-import { FormDataLogin, ObjectContext, ResponseLogin } from "../types";
+import { FormDataLogin, ObjectContext, ResponseLogin } from "../helpers/types";
 import axios, { AxiosResponse } from "axios";
-import { API_URL } from "../index";
 import { useNavigate, useOutletContext } from "react-router-dom";
-
+import { REACT_APP_API_URL } from "../react-app-env.d";
 
 export default function Login() {
 
-  const obj: ObjectContext = useOutletContext();
+  const objectContext: ObjectContext = useOutletContext();
   const navigate = useNavigate();
 
 
@@ -19,7 +18,7 @@ export default function Login() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios.post(`${API_URL}/user/login`, {
+    axios.post(`${REACT_APP_API_URL}/user/login`, {
       username: formData.username,
       password: formData.password
     }).then((response: AxiosResponse<any>) => {
@@ -27,8 +26,8 @@ export default function Login() {
 
       if (response.status === 200) {
         localStorage.setItem("loggedUser", JSON.stringify(response.data as ResponseLogin));
-        obj.setLoggedUser(response.data as ResponseLogin);
-        navigate('/home');
+        objectContext.setLoggedUser(response.data as ResponseLogin);
+        navigate('/');
       }
     })
       .catch((error) => console.error("An error has occurred during logging in:", error));
