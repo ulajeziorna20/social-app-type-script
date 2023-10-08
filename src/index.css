@@ -32,6 +32,11 @@ code {
   color: white;
 }
 
+.Button.SecondaryButton {
+  background-color: darkorange;
+  color: white;
+}
+
 .Button.DisabledButton {
   background-color: lightgray;
   color: white;
@@ -55,6 +60,13 @@ code {
 .Button.DangerButton:focus {
   background-color: red;
 }
+
+.Button.SecondaryButton:hover,
+.Button.SecondaryButton:active,
+.Button.SecondaryButton:focus {
+  background-color: orange;
+}
+
 
 .FontBold {
   font-weight: bold;
