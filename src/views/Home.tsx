@@ -1,12 +1,13 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import axios, { AxiosResponse } from "axios";
-import { ObjectContext, Post } from "../helpers/types";
+import { ObjectContext, Post, User } from "../helpers/types";
 import './Home.css';
 import PostElement from "./PostElement";
 
 import { useOutletContext } from "react-router-dom";
 import { REACT_APP_API_URL } from "../react-app-env.d";
+import Recommendations from "./Recommendations";
 
 export default function Home() {
 
@@ -15,6 +16,7 @@ export default function Home() {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPostContent, setNewPostContent] = useState<string>('');
+  const [recommendations, setRecommendations] = useState<User[]>([]);
 
 
 
@@ -27,6 +29,7 @@ export default function Home() {
         // how to map to correct interface type?
 
         setPosts(response.data as Post[]);
+        getRecommendations();
       }
     )
       .catch((error) => {
@@ -126,6 +129,50 @@ export default function Home() {
   }
 
 
+  const getRecommendations = () => {
+    axios.get(`${REACT_APP_API_URL}/follows/recommendations`, {})
+      .then(
+        (response: AxiosResponse<any>) => {
+          if (response.status === 200) {
+            setRecommendations(response.data as User[]);
+          }
+        }
+      )
+      .catch((error) => {
+        console.error('An error has occurred during getting recommendations:', error);
+      });
+  }
+
+  const followUser = (id: number) => {
+    axios.post(`${REACT_APP_API_URL}/follows/follow`, {
+      leader_id: id
+    })
+      .then(
+        (response: AxiosResponse<any>) => {
+          console.log('resp2', response);
+        }
+      )
+      .catch((error) => {
+        console.error('An error has occurred during setting a follow for an user:', error);
+      });
+  }
+
+  const unfollowUser = (id: number) => {
+    axios.post(`${REACT_APP_API_URL}/follows/disfollow`, {
+      leader_id: id
+    })
+      .then(
+        (response: AxiosResponse<any>) => {
+          console.log('unfollow resp', response);
+        }
+      )
+      .catch((error) => {
+        console.error('An error has occurred during setting a unfollow for an user:', error);
+      });
+  }
+
+
+
   useEffect(() => {
     getLatestPosts();
   }, []);
@@ -147,14 +194,19 @@ export default function Home() {
           </form>
         </div>
       }
+
+      {objectContext.loggedUser.jwt_token.length > 0 &&
+        <Recommendations recommendations={recommendations} followUser={(id) => followUser(id)} />
+      }
       <div className="PostList">
         <h2>Posts</h2>
         {posts.map(
           (post: Post) => {
             return <PostElement post={post} key={post.id}
-              deletePost={() => deletePost(post.id)}
-              likePost={() => likePost(post.id)}
-              dislikePost={() => dislikePost(post.id)}
+              deletePost={(id) => deletePost(id)}
+              likePost={(id) => likePost(id)}
+              dislikePost={(id) => dislikePost(id)}
+              unfollow={(id) => unfollowUser(id)}
             />
           }
         )}
