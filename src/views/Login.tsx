@@ -44,9 +44,9 @@ export default function Login() {
   }
 
   return (
-    <div className="LoginFormContainer">
+    <div className="FormContainer">
       <h2>Log In</h2>
-      <form className="LoginForm" onSubmit={handleSubmit}>
+      <form className="FormBody" onSubmit={handleSubmit}>
         <label form={formData.username}>Username*:</label>
         <input type="text"
           name="username"
@@ -55,7 +55,7 @@ export default function Login() {
         <label form={formData.password}>Password*:</label>
         <input type="password" placeholder="Enter password"
           name="password" onChange={handleInputChange} />
-        <button type="submit" className="LoginFormButton">Login</button>
+         <button type="submit" className="Button PrimaryButton">Login</button>
       </form>
     </div>
   )

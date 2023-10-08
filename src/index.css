@@ -11,3 +11,67 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.Button {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-top: 20px;
+}
+
+.Button.PrimaryButton {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+
+
+.Button.DangerButton {
+  background-color: darkred;
+  color: white;
+}
+
+.Button.DisabledButton {
+  background-color: lightgray;
+  color: white;
+}
+
+
+.Button:hover,
+.Button:focus,
+.Button:active {
+  cursor: pointer;
+}
+
+.Button.PrimaryButton:hover,
+.Button.PrimaryButton:focus,
+.Button.PrimaryButton:active {
+  background-color: dodgerblue;
+}
+
+.Button.DangerButton:hover,
+.Button.DangerButton:active,
+.Button.DangerButton:focus {
+  background-color: red;
+}
+
+.FontBold {
+  font-weight: bold;
+}
+
+.FontUppercase {
+  text-transform: uppercase;
+}
+
+
+.FormContainer {
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.FormBody {
+  display: flex;
+  flex-flow: column;
+  row-gap: 10px;
+}

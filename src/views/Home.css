@@ -1,25 +1,12 @@
+.HomeContainer {
+  display: flex;
+  flex-flow: column;
+}
+
+
 .PostList {
   max-width: 800px;
   margin: 0 auto;
-}
-
-.LoadMoreButton {
-  width: 200px;
-  display: inherit;
-  margin: 20px auto;
-  background-color: cornflowerblue;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 20px;
-}
-
-
-.LoadMoreButton:focus,
-.LoadMoreButton:hover,
-.LoadMoreButton:active {
-  background-color: dodgerblue;
-  cursor: pointer;
 }
 
 .NewPostContainer {
@@ -37,17 +24,7 @@
   width: 100%;
 }
 
-.NewPostContainer .NewPostAddButton {
-  padding: 10px 50px;
-  background-color: cornflowerblue;
-  color: white;
-  border: none;
-  border-radius: 20px;
-}
 
-.NewPostContainer .NewPostAddButton:hover,
-.NewPostContainer .NewPostAddButton:active,
-.NewPostContainer .NewPostAddButton:focus {
-  background-color: dodgerblue;
-  cursor: pointer;
+.LoadMoreButton {
+  margin: 20px auto;
 }
