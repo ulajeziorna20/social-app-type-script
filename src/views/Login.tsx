@@ -9,12 +9,15 @@ export default function Login() {
 
   const objectContext: ObjectContext = useOutletContext();
   const navigate = useNavigate();
+  const errorMessage = "Incorrect username or password";
 
 
   const [formData, setFormData] = useState<FormDataLogin>({
     username: "",
     password: ""
   });
+
+  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,6 +32,9 @@ export default function Login() {
         objectContext.setLoggedUser(response.data as ResponseLogin);
         navigate('/');
       }
+      else {
+        setShowErrorMessage(true);
+      }
     })
       .catch((error) => console.error("An error has occurred during logging in:", error));
 
@@ -41,6 +47,8 @@ export default function Login() {
       ...formData,
       [name]: target.value
     });
+
+    setShowErrorMessage(false);
   }
 
   return (
@@ -55,8 +63,9 @@ export default function Login() {
         <label form={formData.password}>Password*:</label>
         <input type="password" placeholder="Enter password"
           name="password" onChange={handleInputChange} />
-         <button type="submit" className="Button PrimaryButton">Login</button>
+        <button type="submit" className="Button PrimaryButton">Login</button>
       </form>
+      {showErrorMessage && <p className="FontItalic FontRed">{errorMessage}</p>}
     </div>
   )
 }

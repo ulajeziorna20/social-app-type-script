@@ -43,12 +43,15 @@ export default function SignUp() {
       if (response.status === 200) {
         navigate('/registered');
       }
+      else {
+        console.log(response);
+      }
     })
       .catch((error) => console.error("An error has occurred during registering an user:", error));
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("change input", e);
+
     const target = e.target;
     const name = target.name;
     setFormData({
@@ -56,7 +59,7 @@ export default function SignUp() {
       [name]: {
         value: target.value,
         valid: target.validity.valid,
-        error: "test"
+        error: ""
       }
     });
   }

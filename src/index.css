@@ -60,8 +60,17 @@ code {
   font-weight: bold;
 }
 
+.FontItalic {
+  font-style: italic;
+}
+
+
 .FontUppercase {
   text-transform: uppercase;
+}
+
+.FontRed {
+  color: red;
 }
 
 
