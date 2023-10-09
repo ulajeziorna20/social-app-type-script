@@ -25,10 +25,8 @@ export default function Home() {
 
   const getLatestPosts = () => {
     axios.post(`${REACT_APP_API_URL}/post/latest`).then(
-      (response: AxiosResponse<any>) => {
-        // how to map to correct interface type?
-
-        setPosts(response.data as Post[]);
+      (response: AxiosResponse<Post[]>) => {
+        setPosts(response.data);
         getRecommendations();
       }
     )
@@ -41,9 +39,9 @@ export default function Home() {
     axios.post(`${REACT_APP_API_URL}/post/newer-then`, {
       date: posts[0].created_at
     }).then(
-      (response: AxiosResponse<any>) => {
+      (response: AxiosResponse<Post[]>) => {
         // how to map to correct interface type?
-        setPosts((response.data as Post[]).concat(posts));
+        setPosts((response.data).concat(posts));
       }
     )
       .catch((error) => {
@@ -55,9 +53,9 @@ export default function Home() {
     axios.post(`${REACT_APP_API_URL}/post/older-then`, {
       date: posts[posts.length - 1].created_at
     }).then(
-      (response: AxiosResponse<any>) => {
+      (response: AxiosResponse<Post[]>) => {
         // how to map to correct interface type?
-        setPosts(posts.concat(response.data as Post[]));
+        setPosts(posts.concat(response.data));
       }
     )
       .catch((error) => {
@@ -130,11 +128,11 @@ export default function Home() {
 
 
   const getRecommendations = () => {
-    axios.get(`${REACT_APP_API_URL}/follows/recommendations`, {})
+    axios.post(`${REACT_APP_API_URL}/follows/recommendations`, {})
       .then(
-        (response: AxiosResponse<any>) => {
+        (response: AxiosResponse<User[]>) => {
           if (response.status === 200) {
-            setRecommendations(response.data as User[]);
+            setRecommendations(response.data);
           }
         }
       )
@@ -150,6 +148,10 @@ export default function Home() {
       .then(
         (response: AxiosResponse<any>) => {
           console.log('resp2', response);
+
+          if (response.status === 201) {
+            getLatestPosts();
+          }
         }
       )
       .catch((error) => {
@@ -164,6 +166,10 @@ export default function Home() {
       .then(
         (response: AxiosResponse<any>) => {
           console.log('unfollow resp', response);
+
+          if (response.status === 201) {
+            getLatestPosts();
+          }
         }
       )
       .catch((error) => {

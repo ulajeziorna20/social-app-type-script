@@ -1,5 +1,5 @@
 import React from "react";
-import { User } from "../helpers/interfaces";
+import { User } from "../helpers/types";
 import "./UserFollowElement.css";
 
 type UserFollowElementProps = {
@@ -8,9 +8,11 @@ type UserFollowElementProps = {
 }
 
 export default function UserFollowElement(props: UserFollowElementProps) {
-  return (<div className="RecommendationsUserElement">
-    <img src={props.user.avatar_url} />
-    <h4>{props.user.username}</h4>
-    <button type="button" className="Button PrimaryButton" onClick={props.followUser(props.user.id)}>Follow</button>
-  </div>);
+  return (
+    <div className="RecommendationsUserElement">
+      <img src={props.user.avatar_url} alt={'user ' + props.user.username + ' avatar'} />
+      <h4>{props.user.username}</h4>
+      <button type="button" className="Button PrimaryButton" onClick={() => props.followUser(props.user.id)}>Follow</button>
+    </div>
+  );
 }

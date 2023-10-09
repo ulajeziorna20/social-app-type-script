@@ -81,7 +81,7 @@ export default function PostElement(props: PostProps) {
           }
           {
             objectContext.loggedUser.username !== props.post.user?.username && userLiked &&
-            <button className="Button SecondaryButton" onClick={DislikePost}>Dislike</button>
+            <button type="button" className="Button SecondaryButton" onClick={() => props.unfollow(props.post?.user?.id!)}>Unfollow</button>
           }
         </div>
       </div>
