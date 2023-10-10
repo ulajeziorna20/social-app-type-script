@@ -28,13 +28,14 @@ export default function Home() {
 
 
   const getLatestPosts = () => {
-    axios.post(`${HTTP_REACT_APP_API_URL}/post/latest`).then(
-      (response: AxiosResponse<Post[]>) => {
+    axios.post(`${HTTP_REACT_APP_API_URL}/post/latest`)
+    .then( (response: AxiosResponse<Post[]>) => {
+
+      console.log('wchodze');
+      
         setPosts(response.data);
-       
-      }
-    )
-      .catch((error) => {
+
+      }).catch((error) => {
         console.error('An error has occured:', error);
       })
   }
@@ -61,10 +62,10 @@ export default function Home() {
 
 
       console.log(response);
-      
-        // how to map to correct interface type?
-        setPosts(posts.concat(response.data));
-      }
+
+      // how to map to correct interface type?
+      setPosts(posts.concat(response.data));
+    }
     )
       .catch((error) => {
         console.error('An error has occured:', error);
@@ -90,55 +91,11 @@ export default function Home() {
   }
 
 
-  const deletePost = (id: number) => {
-    axios.post(`${HTTPS_REACT_APP_API_URL}/post/delete`, {
-      post_id: id
-    }).then(
-      (response: AxiosResponse<any>) => {
-        if (response.status === 200) {
-          getLatestPosts();
-        }
-      }
-    )
-      .catch((error) => {
-        console.error('An error has occurred during deleting the post:', error);
-      })
-  }
-
-
-  const likePost = (id: number) => {
-    return axios.post(`${HTTPS_REACT_APP_API_URL}/post/like`, {
-      post_id: id
-    }).then(
-      (response: AxiosResponse<any>) => {
-        return response.status === 201;
-      }
-    )
-      .catch((error) => {
-        console.error('An error has occurred during liking a post:', error);
-        return false;
-      });
-  }
-
-  const dislikePost = (id: number) => {
-    return axios.post(`${HTTPS_REACT_APP_API_URL}/post/dislike`, {
-      post_id: id
-    }).then(
-      (response: AxiosResponse<any>) => {
-        return response.status === 201;
-      }
-    )
-      .catch((error) => {
-        console.error('An error has occurred during disliking a post:', error);
-        return false;
-      });
-  }
-
+ 
 
   const getRecommendations = () => {
-    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/recommendations`, {})
-      .then(
-        (response: AxiosResponse<User[]>) => {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/recommendations`)
+      .then( (response: AxiosResponse<User[]>) => {
           if (response.status === 200) {
             setRecommendations(response.data);
           }
@@ -149,41 +106,6 @@ export default function Home() {
       });
   }
 
-  const followUser = (id: number) => {
-    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/follow`, {
-      leader_id: id
-    })
-      .then(
-        (response: AxiosResponse<any>) => {
-          console.log('resp2', response);
-
-          if (response.status === 201) {
-            getLatestPosts();
-          }
-        }
-      )
-      .catch((error) => {
-        console.error('An error has occurred during setting a follow for an user:', error);
-      });
-  }
-
-  const unfollowUser = (id: number) => {
-    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/disfollow`, {
-      leader_id: id
-    })
-      .then(
-        (response: AxiosResponse<any>) => {
-          console.log('unfollow resp', response);
-
-          if (response.status === 201) {
-            getLatestPosts();
-          }
-        }
-      )
-      .catch((error) => {
-        console.error('An error has occurred during setting a unfollow for an user:', error);
-      });
-  }
 
 
 
@@ -212,23 +134,24 @@ export default function Home() {
         </div>
       }
 
-      {/* {objectContext.loggedUser.jwt_token.length > 0 &&
-        <Recommendations recommendations={recommendations} followUser={followUser} />
-      } */}
-      {/* <div className="PostList">
+      {objectContext.loggedUser.jwt_token.length > 0 &&
+        <Recommendations recommendations={recommendations} getLatestPosts={getLatestPosts} getRecommendations={getRecommendations} />
+      }
+      <div className="PostList">
         <h2>Posts</h2>
         {posts.map(
           (post: Post) => {
-            return <PostElement post={post} key={post.id}
-              deletePost={(id) => deletePost(id)}
-              likePost={(id) => likePost(id)}
-              dislikePost={(id) => dislikePost(id)}
-              unfollow={(id) => unfollowUser(id)}
+            return <PostElement
+              post={post}
+              key={post.id}
+              getLatestPosts={getLatestPosts}
+              setPosts={setPosts}
+              getRecommendations={getRecommendations}
             />
           }
         )}
-      </div> */}
-      {/* <button className="Button PrimaryButton LoadMoreButton" onClick={getOlderPosts}>Load more</button> */}
+      </div>
+      <button className="Button PrimaryButton LoadMoreButton" onClick={getOlderPosts}>Load more</button>
     </div>
   )
 }

@@ -5,8 +5,10 @@ import "./SignOut.css";
 
 export default function SignOut() {
 
-  return <div className="Container">
-    <h2>Sign Out</h2>
-    <p>You have been successfully signed out.</p>
-  </div>
+  return (
+    <div className="Container">
+      <h2>Sign Out</h2>
+      <p>You have been successfully signed out.</p>
+    </div>
+  )
 }

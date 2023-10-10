@@ -2,13 +2,25 @@ import React from "react";
 import "./Recommendations.css";
 import { User } from "../helpers/types";
 import UserFollowElement from "./UserFollowElement";
+import axios, { AxiosResponse } from "axios";
+import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
 
-interface RecommendationsProps {
+type RecommendationsProps = {
   recommendations: User[],
-  followUser: (id: number) => any
+  getLatestPosts: () => void,
+  getRecommendations:  () => void,
+
 }
 
 export default function Recommendations(props: RecommendationsProps) {
+
+
+
+  // nie odswiezają sie posty i strona ???
+
+
+
+
   return (
     <div className="RecommendationsContainer">
 
@@ -17,9 +29,13 @@ export default function Recommendations(props: RecommendationsProps) {
         {props.recommendations.map(
           (user: User) => {
             // remember: here is only passing the reference to a function, not calling it out!
-            return <UserFollowElement user={user}
-              followUser={props.followUser}
-              key={user.id} />
+            return <UserFollowElement
+              user={user}
+              key={user.id}
+              getLatestPosts={props.getLatestPosts}
+              getRecommendations={props.getRecommendations}
+            />
+
           }
         )}
         {/* {
