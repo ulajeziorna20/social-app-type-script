@@ -115,10 +115,10 @@ export default function PostElement(props: PostProps) {
         </div>
         <div className="SinglePostFooter">
           <span>Likes: {likesCount}</span>
-          {/* {
+          {
             objectContext.loggedUser.username && objectContext.loggedUser.username === props.post.user?.username &&
             <button className="Button DangerButton" onClick={() => setModalVisible(true)}>Delete</button>
-          } */}
+          }
 
           {
             objectContext.loggedUser.username &&
@@ -126,18 +126,18 @@ export default function PostElement(props: PostProps) {
           }
         </div>
       </div>
-      {/* {modalVisible &&
+      {modalVisible &&
         <div className="SinglePostDeleteConfirm">
           <p className="FontBold FontUppercase">Are you sure?</p>
           <div className="DeleteConfirmButtonsContainer">
             <button className="Button PrimaryButton" onClick={() => setModalVisible(false)}>CANCEL</button>
             <button className="Button DangerButton" onClick={() => {
               setModalVisible(false);
-              props.deletePost(props.post.id);
+              deletePost(props.post.id);
             }}>DELETE</button>
           </div>
         </div>
-      } */}
+      }
     </div>
   );
 }
