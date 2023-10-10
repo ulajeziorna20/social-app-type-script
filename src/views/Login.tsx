@@ -3,7 +3,7 @@ import './Login.css';
 import { FormDataLogin, ObjectContext, ResponseLogin } from "../helpers/types";
 import axios, { AxiosResponse } from "axios";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { REACT_APP_API_URL } from "../react-app-env.d";
+import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
 
 export default function Login() {
 
@@ -21,7 +21,7 @@ export default function Login() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios.post(`${REACT_APP_API_URL}/user/login`, {
+    axios.post(`${HTTP_REACT_APP_API_URL}/user/login`, {
       username: formData.username,
       password: formData.password
     }).then((response: AxiosResponse<ResponseLogin>) => {
@@ -29,7 +29,9 @@ export default function Login() {
 
       if (response.status === 200) {
         localStorage.setItem("loggedUser", JSON.stringify(response.data));
+        localStorage.setItem("timeStamp", new Date().toDateString());
         objectContext.setLoggedUser(response.data);
+        objectContext.setTimeStamp(new Date());
         navigate('/');
       }
       else {

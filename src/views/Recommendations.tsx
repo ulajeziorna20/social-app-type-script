@@ -1,6 +1,6 @@
 import React from "react";
 import "./Recommendations.css";
-import { User } from "../helpers/interfaces";
+import { User } from "../helpers/types";
 import UserFollowElement from "./UserFollowElement";
 
 interface RecommendationsProps {

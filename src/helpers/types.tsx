@@ -45,7 +45,9 @@ export type ResponseLogin = {
 }
 
 
-export interface ObjectContext {
+export type ObjectContext = {
   loggedUser: ResponseLogin,
-  setLoggedUser: (res: ResponseLogin) => void
+  setLoggedUser: (res: ResponseLogin) => void,
+  timeStamp: Date,
+  setTimeStamp: (stamp: Date) => void
 }

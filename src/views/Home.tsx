@@ -6,7 +6,7 @@ import './Home.css';
 import PostElement from "./PostElement";
 
 import { useOutletContext } from "react-router-dom";
-import { REACT_APP_API_URL } from "../react-app-env.d";
+import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
 import Recommendations from "./Recommendations";
 
 export default function Home() {
@@ -20,14 +20,18 @@ export default function Home() {
 
 
 
-  axios.defaults.headers.common['Authorization'] = "Bearer " + (objectContext.loggedUser.jwt_token.length > 0 ? objectContext.loggedUser.jwt_token : '');
+  axios.defaults.headers.common['Authorization'] = "Bearer " + (objectContext.loggedUser?.jwt_token.length > 0 ? objectContext.loggedUser.jwt_token : '');
+
+  const isLoggedUser = () => {
+    return objectContext.loggedUser?.jwt_token.length > 0;
+  }
 
 
   const getLatestPosts = () => {
-    axios.post(`${REACT_APP_API_URL}/post/latest`).then(
+    axios.post(`${HTTP_REACT_APP_API_URL}/post/latest`).then(
       (response: AxiosResponse<Post[]>) => {
         setPosts(response.data);
-        getRecommendations();
+       
       }
     )
       .catch((error) => {
@@ -36,7 +40,7 @@ export default function Home() {
   }
 
   const getNewestPosts = () => {
-    axios.post(`${REACT_APP_API_URL}/post/newer-then`, {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/post/newer-then`, {
       date: posts[0].created_at
     }).then(
       (response: AxiosResponse<Post[]>) => {
@@ -50,10 +54,14 @@ export default function Home() {
   }
 
   const getOlderPosts = () => {
-    axios.post(`${REACT_APP_API_URL}/post/older-then`, {
+
+    axios.post(`${HTTPS_REACT_APP_API_URL}/post/older-then`, {
       date: posts[posts.length - 1].created_at
-    }).then(
-      (response: AxiosResponse<Post[]>) => {
+    }).then((response: AxiosResponse<Post[]>) => {
+
+
+      console.log(response);
+      
         // how to map to correct interface type?
         setPosts(posts.concat(response.data));
       }
@@ -66,7 +74,7 @@ export default function Home() {
 
   const addNewPost = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios.post(`${REACT_APP_API_URL}/post/add`, {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/post/add`, {
       content: newPostContent
     }).then(
       (response: AxiosResponse<any>) => {
@@ -83,7 +91,7 @@ export default function Home() {
 
 
   const deletePost = (id: number) => {
-    axios.post(`${REACT_APP_API_URL}/post/delete`, {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/post/delete`, {
       post_id: id
     }).then(
       (response: AxiosResponse<any>) => {
@@ -99,7 +107,7 @@ export default function Home() {
 
 
   const likePost = (id: number) => {
-    return axios.post(`${REACT_APP_API_URL}/post/like`, {
+    return axios.post(`${HTTPS_REACT_APP_API_URL}/post/like`, {
       post_id: id
     }).then(
       (response: AxiosResponse<any>) => {
@@ -113,7 +121,7 @@ export default function Home() {
   }
 
   const dislikePost = (id: number) => {
-    return axios.post(`${REACT_APP_API_URL}/post/dislike`, {
+    return axios.post(`${HTTPS_REACT_APP_API_URL}/post/dislike`, {
       post_id: id
     }).then(
       (response: AxiosResponse<any>) => {
@@ -128,7 +136,7 @@ export default function Home() {
 
 
   const getRecommendations = () => {
-    axios.post(`${REACT_APP_API_URL}/follows/recommendations`, {})
+    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/recommendations`, {})
       .then(
         (response: AxiosResponse<User[]>) => {
           if (response.status === 200) {
@@ -142,7 +150,7 @@ export default function Home() {
   }
 
   const followUser = (id: number) => {
-    axios.post(`${REACT_APP_API_URL}/follows/follow`, {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/follow`, {
       leader_id: id
     })
       .then(
@@ -160,7 +168,7 @@ export default function Home() {
   }
 
   const unfollowUser = (id: number) => {
-    axios.post(`${REACT_APP_API_URL}/follows/disfollow`, {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/follows/disfollow`, {
       leader_id: id
     })
       .then(
@@ -181,7 +189,10 @@ export default function Home() {
 
   useEffect(() => {
     getLatestPosts();
-  }, []);
+    if (isLoggedUser()) {
+      getRecommendations();
+    }
+  }, [objectContext.loggedUser]);
 
 
 
@@ -201,10 +212,10 @@ export default function Home() {
         </div>
       }
 
-      {objectContext.loggedUser.jwt_token.length > 0 &&
-        <Recommendations recommendations={recommendations} followUser={(id) => followUser(id)} />
-      }
-      <div className="PostList">
+      {/* {objectContext.loggedUser.jwt_token.length > 0 &&
+        <Recommendations recommendations={recommendations} followUser={followUser} />
+      } */}
+      {/* <div className="PostList">
         <h2>Posts</h2>
         {posts.map(
           (post: Post) => {
@@ -216,8 +227,8 @@ export default function Home() {
             />
           }
         )}
-      </div>
-      <button className="Button PrimaryButton LoadMoreButton" onClick={getOlderPosts}>Load more</button>
+      </div> */}
+      {/* <button className="Button PrimaryButton LoadMoreButton" onClick={getOlderPosts}>Load more</button> */}
     </div>
   )
 }
