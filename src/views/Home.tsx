@@ -1,18 +1,17 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from "react";
 
 import axios, { AxiosResponse } from "axios";
 import { ObjectContext, Post, User } from "../helpers/types";
 import './Home.css';
 import PostElement from "./PostElement";
-
+import { LoginContext } from "./App";
 import { useOutletContext } from "react-router-dom";
 import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
 import Recommendations from "./Recommendations";
 
 export default function Home() {
 
-
-  const objectContext: ObjectContext = useOutletContext();
+  const context = useContext(LoginContext);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPostContent, setNewPostContent] = useState<string>('');
@@ -20,19 +19,12 @@ export default function Home() {
 
 
 
-  axios.defaults.headers.common['Authorization'] = "Bearer " + (objectContext.loggedUser?.jwt_token.length > 0 ? objectContext.loggedUser.jwt_token : '');
-
-  const isLoggedUser = () => {
-    return objectContext.loggedUser?.jwt_token.length > 0;
-  }
-
-
   const getLatestPosts = () => {
-    axios.post(`${HTTP_REACT_APP_API_URL}/post/latest`)
-    .then( (response: AxiosResponse<Post[]>) => {
+    axios.post(`${HTTPS_REACT_APP_API_URL}/post/latest`)
+      .then((response: AxiosResponse<Post[]>) => {
 
-      console.log('wchodze');
-      
+        console.log('wchodze');
+
         setPosts(response.data);
 
       }).catch((error) => {
@@ -91,15 +83,15 @@ export default function Home() {
   }
 
 
- 
+
 
   const getRecommendations = () => {
     axios.post(`${HTTPS_REACT_APP_API_URL}/follows/recommendations`)
-      .then( (response: AxiosResponse<User[]>) => {
-          if (response.status === 200) {
-            setRecommendations(response.data);
-          }
+      .then((response: AxiosResponse<User[]>) => {
+        if (response.status === 200) {
+          setRecommendations(response.data);
         }
+      }
       )
       .catch((error) => {
         console.error('An error has occurred during getting recommendations:', error);
@@ -107,21 +99,27 @@ export default function Home() {
   }
 
 
-
+  console.log(context?.loggedUser);
 
   useEffect(() => {
     getLatestPosts();
-    if (isLoggedUser()) {
+    console.log(context?.loggedUser);
+
+
+    if (context?.loggedUser) {
+
+  
+      
       getRecommendations();
     }
-  }, [objectContext.loggedUser]);
+  }, [context?.loggedUser]);
 
 
 
 
   return (
     <div className="HomeContainer">
-      {objectContext.loggedUser.jwt_token.length > 0 &&
+      {context?.loggedUser &&
         <div className="NewPostContainer">
           <form className="NewPostForm" onSubmit={(event: FormEvent<HTMLFormElement>) => addNewPost(event)}>
             <textarea rows={3}
@@ -134,7 +132,7 @@ export default function Home() {
         </div>
       }
 
-      {objectContext.loggedUser.jwt_token.length > 0 &&
+      {context?.loggedUser &&
         <Recommendations recommendations={recommendations} getLatestPosts={getLatestPosts} getRecommendations={getRecommendations} />
       }
       <div className="PostList">

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { ObjectContext, Post, User } from "../helpers/types";
 import './PostElement.css';
 import axios, { AxiosResponse } from "axios";
 import { useOutletContext } from "react-router-dom";
 import { datePipe } from "../helpers/dateHelpers";
 import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
+import { LoginContext } from "./App";
 
 
 type PostProps = {
@@ -25,9 +26,8 @@ type disfollowRes = {
 export default function PostElement(props: PostProps) {
 
 
-
-  const objectContext: ObjectContext = useOutletContext();
-  const userLikedInit: User | undefined = props.post.likes.find((user: User) => user.username === objectContext.loggedUser.username);
+  const context = useContext(LoginContext);
+  const userLikedInit: User | undefined = props.post.likes.find((user: User) => user.username === context?.loggedUser?.username);
   const dateOfPost: string = datePipe(props.post.created_at);
 
 
@@ -105,7 +105,7 @@ export default function PostElement(props: PostProps) {
           <img src={props.post.user?.avatar_url} alt="user avatar" />
           <h3>{props.post.user?.username}</h3>
           {
-            objectContext.loggedUser.username && props.post.user?.username !== objectContext.loggedUser?.username &&
+            context?.loggedUser?.username && props.post.user?.username !== context?.loggedUser?.username &&
             <button type="button" className="Button SecondaryButton" onClick={() => unfollowUser(props.post.user?.id!)}>Unfollow</button>
           }
           <span className="SinglePostDate">created: {dateOfPost}</span>
@@ -116,12 +116,12 @@ export default function PostElement(props: PostProps) {
         <div className="SinglePostFooter">
           <span>Likes: {likesCount}</span>
           {
-            objectContext.loggedUser.username && objectContext.loggedUser.username === props.post.user?.username &&
+            context?.loggedUser?.username && context.loggedUser.username === props.post.user?.username &&
             <button className="Button DangerButton" onClick={() => setModalVisible(true)}>Delete</button>
           }
 
           {
-            objectContext.loggedUser.username &&
+            context?.loggedUser?.username &&
             <button className="Button PrimaryButton" onClick={() => likePost(props.post.id, userLiked)}>{userLiked ? "Like" : "Dislike"}</button>
           }
         </div>

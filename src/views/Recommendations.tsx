@@ -15,11 +15,8 @@ type RecommendationsProps = {
 export default function Recommendations(props: RecommendationsProps) {
 
 
-
-  // nie odswiezają sie posty i strona ???
-
-
-
+  console.log(props.recommendations);
+  
 
   return (
     <div className="RecommendationsContainer">
