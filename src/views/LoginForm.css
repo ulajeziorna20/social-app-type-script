@@ -1,0 +1,9 @@
+.FormBody label {
+  font-size: larger;
+  font-weight: 500;
+}
+
+.FormBody input {
+  height: 40px;
+  border-radius: 5px;
+}

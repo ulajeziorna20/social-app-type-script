@@ -1,16 +1,16 @@
 import React, { FormEvent, useContext, useState } from "react";
-import './Login.css';
+import './LoginForm.css';
 import { FormDataLogin, ObjectContext, ResponseLogin } from "../helpers/types";
 import axios, { AxiosResponse } from "axios";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
-import { LoginContext } from "./App";
+import { ContextProps, LoginContext } from "./App";
 
 
 
 const LoginForm = () => {
 
-  const context = useContext(LoginContext);
+  const context = useContext<ContextProps | null>(LoginContext);
 
   console.log(context);
 
@@ -46,6 +46,7 @@ const LoginForm = () => {
         context?.setLoggedUser(response.data);
         context?.setTimeStamp(new Date());
         navigate('/social-app-type-script');
+        context?.setShowPopup(false)
       }
       else {
         setShowErrorMessage(true);
@@ -68,14 +69,13 @@ const LoginForm = () => {
 
   return (
     <div className="FormContainer">
-      <h2>Log In</h2>
       <form className="FormBody" onSubmit={handleSubmit}>
-        <label form={formData.username}>Username*:</label>
+        <label form={formData.username}>Username:</label>
         <input type="text"
           name="username"
           placeholder="Enter username"
           onChange={handleInputChange} />
-        <label form={formData.password}>Password*:</label>
+        <label form={formData.password}>Password:</label>
         <input type="password" placeholder="Enter password"
           name="password" onChange={handleInputChange} />
         <button type="submit" className="Button PrimaryButton">Login</button>

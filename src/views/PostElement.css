@@ -11,16 +11,25 @@
 }
 
 .SinglePostHeader {
-  height: 60px;
+  height: 100px;
   display: flex;
   justify-content: start;
   gap: 50px;
   align-items: center;
 }
 
+.SinglePostHeader h3 {
+  font-size: 1.5em;
+}
+
 .SinglePostHeader img {
   height: 100%;
   border-radius: 100%;
+  border: 5px solid rgb(28, 102, 186);
+}
+
+.SinglePostBody p {
+  padding-left: 145px;
 }
 
 .SinglePostDate {

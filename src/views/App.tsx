@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Link, Outlet, Router } from "react-router-dom";
 import { ResponseLogin } from "../helpers/types";
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { HTTPS_REACT_APP_API_URL, HTTP_REACT_APP_API_URL } from "../react-app-env.d";
 import Popup from './Popup';
 
@@ -10,7 +10,7 @@ import { createContext, useContext } from 'react';
 import AppRoutes from './AppRoutes';
 
 
-type ContextProps = {
+export type ContextProps = {
   showPopup: boolean;
   setShowPopup: (show: boolean) => void;
   loggedUser: ResponseLogin | null;
@@ -34,9 +34,9 @@ function App() {
   axios.defaults.headers.common['Authorization'] = "Bearer " + (loggedUser?.jwt_token ? loggedUser?.jwt_token : '');
 
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     axios.post(`${HTTP_REACT_APP_API_URL}/user/logout`)
-      .then((res) => {
+      .then((res: AxiosResponse) => {
         setLoggedUser(null);
         localStorage.removeItem("loggedUser");
         setTimeStamp(new Date('1999-01-01'));
@@ -68,6 +68,7 @@ function App() {
 
   return (
     <div className="App">
+      {showPopup && <div className="popupBgd"></div>}
       <LoginContext.Provider value={{ showPopup, setShowPopup, loggedUser, setLoggedUser, setTimeStamp }}>
         <header className="App-header">
           <h1>Social App</h1>
@@ -80,7 +81,7 @@ function App() {
 
 
 
-        <nav>
+        <nav className='AppNavbar'>
           <ul>
             <li>
               <Link to={"/social-app-type-script"}>HOME</Link>
@@ -108,7 +109,8 @@ function App() {
         <AppRoutes />
       </LoginContext.Provider>
       {/* <Outlet context={{ loggedUser, setLoggedUser, timeStamp, setTimeStamp }} /> */}
-    </div>
+
+    </div >
   );
 }
 

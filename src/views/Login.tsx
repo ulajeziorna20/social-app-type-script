@@ -7,7 +7,11 @@ export default function Login() {
 
 
   return (
-    <LoginForm />
+    <div className="login">
+     
+      <LoginForm />
+    </div>
+
   )
 
 }

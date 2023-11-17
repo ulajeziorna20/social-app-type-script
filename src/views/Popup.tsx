@@ -4,14 +4,12 @@ import React, { useState, useContext } from "react";
 import "./Popup.css"
 import LoginForm from "./LoginForm"
 import { ObjectContext, ResponseLogin, User } from "../helpers/types"
-import { LoginContext } from "./App";
-
-
+import { ContextProps, LoginContext } from "./App";
 
 
 
 const Popup = () => {
-  const context = useContext(LoginContext);
+  const context = useContext<ContextProps | null>(LoginContext);
 
   const closePopup = () => {
     context?.setShowPopup(false)
@@ -29,6 +27,7 @@ const Popup = () => {
 
 
     </div>
+
   )
 }
 

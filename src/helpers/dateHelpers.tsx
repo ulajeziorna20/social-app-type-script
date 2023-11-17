@@ -1,4 +1,4 @@
-export const datePipe = (givenDate: any): string => {
+export const datePipe = (givenDate: Date): string => {
   const d: Date = new Date(givenDate);
   const year = d.getFullYear();
   const month = d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1);

@@ -1,3 +1,4 @@
+
 .popup {
   position: fixed;
   display: block;
@@ -7,11 +8,23 @@
   opacity: 1;
   z-index: 199;
   border-radius: 15px;
-  background-color: rgb(144, 177, 182);
+  background-color: rgb(92, 187, 255);
   border: 1px solid black;
-  width: 400px;
-  height: 300px;
+  width: 500px;
+  height: 400px;
 }
+
+.popup h2 {
+  width: 300px;
+  margin: auto;
+}
+
+.popup span {
+  display: block;
+  width: 390px;
+  margin: auto;
+}
+
 
 .closePopup {
   text-align: right;
